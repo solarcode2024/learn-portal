@@ -1,0 +1,27 @@
+name: learn-portal
+
+networks:
+  dtp-netmonk-learn:
+    external:
+      true
+
+services:
+  database:
+    container_name: dtp-netmonk-learn-database
+    image: postgres:14.17
+    networks:
+      - dtp-netmonk-learn
+    volumes:
+      - ./migration.sql:/docker-entrypoint-initdb.d/a_migration.sql
+      - portal-database:/var/lib/postgresql/data
+    ports:
+      - "8080:5432"
+    environment:
+      - POSTGRES_DB=portal
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+volumes:
+  portal-database:
+    driver: local
+    name: portal-database
