@@ -9,4 +9,6 @@ import (
 func NewAPIRoutes(app *fiber.App, handlers registry.Handler) {
 	user := app.Group("/users")
 	user.Post("/", handlers.User.Register)
+	user.Get("/", handlers.User.GetAllUser)
+	user.Get("/:id", handlers.User.GetUserProfile)
 }

@@ -2,6 +2,7 @@ package user
 
 import (
 	"learn-portal/internal/domain"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -32,7 +33,37 @@ func (i *Handler) Register(c *fiber.Ctx) error {
 
 // TODO : buat handler untuk read all user
 
+func (i *Handler) GetAllUser(c *fiber.Ctx) error {
+	users, err := i.service.GetAllUser()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(err)
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "all users succesfully retrieved",
+		"users":   users,
+	})
+
+}
+
 // TODO : buat handler untuk read one user by id menggunakan path parameter
+
+func (i *Handler) GetUserProfile(c *fiber.Ctx) error {
+	// Mengambil id dari http request
+	// Konversi id tersebut ke integer
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(err)
+	}
+	user, err := i.service.GetUserProfile(id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(err)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "user succcesfully retrieved",
+		"user":    user,
+	})
+}
 
 func NewUserHandler(service domain.UserService) Handler {
 	return Handler{service}

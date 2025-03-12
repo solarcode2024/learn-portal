@@ -14,7 +14,7 @@ type implementation struct {
 func (i *implementation) GetAllUser() ([]domain.User, error) {
 	users, err := i.repository.SelectAllUser()
 	if err != nil {
-		slog.Error(fmt.Sprintf("gagal select all user, detail %v", err.Error()))
+		slog.Error(fmt.Sprintf("gagal mengambil list users, detail %v", err.Error()))
 		return nil, err
 	}
 
@@ -23,14 +23,19 @@ func (i *implementation) GetAllUser() ([]domain.User, error) {
 
 // TODO : PR implementasi oleh afif
 func (i *implementation) GetUserProfile(id int) (*domain.User, error) {
-	panic("unimplemented")
+	user, err := i.repository.SelectOneUserByID(id)
+	if err != nil {
+		slog.Error(fmt.Sprintf("gagal mengambil data user, detail %v", err.Error()))
+		return nil, err
+	}
+	return user, nil
 }
 
 func (i *implementation) Register(data *domain.User) error {
 	// permisalan: validasi
 
 	if err := i.repository.InsertUser(data); err != nil {
-		slog.Error(fmt.Sprintf("gagal insert user, detail %v", err.Error()))
+		slog.Error(fmt.Sprintf("gagal menambahkan user, detail %v", err.Error()))
 		return err
 	}
 

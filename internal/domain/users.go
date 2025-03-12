@@ -24,5 +24,5 @@ type UserRepository interface {
 	SelectAllUser() ([]User, error)
 
 	// ini untuk ngambil data users berdasakan id
-	SelectOneUserByID() (*User, error)
+	SelectOneUserByID(id int) (*User, error)
 }
